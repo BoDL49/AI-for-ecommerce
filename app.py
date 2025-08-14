@@ -67,7 +67,6 @@ def load_rossmann_resources():
 st.title("🚀 Hệ thống Dự báo Doanh thu")
 
 selected_dataset = st.sidebar.selectbox("Chọn bộ dữ liệu muốn phân tích:", ["Olist E-commerce", "Rossmann Store Sales"])
-st.sidebar.header("Chọn Mô hình")
 
 #Olist E-commerce
 if selected_dataset == "Olist E-commerce":
