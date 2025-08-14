@@ -151,7 +151,7 @@ elif selected_dataset == "Rossmann Store Sales":
             show_custom_toast("Đã tải thành công mô hình Rossmann.", icon="✅")
             st.session_state.rossmann_model_loaded = True
             
-        uploaded_file = st.file_uploader("File Rossmann...", type=['csv', 'xlsx'], key="rossmann_uploader")
+        uploaded_file = st.file_uploader("", type=['csv', 'xlsx'], key="rossmann_uploader")
         
         if uploaded_file is not None:
             try:
