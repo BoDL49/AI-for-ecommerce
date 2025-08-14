@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from sklearn.metrics import mean_absolute_percentage_error
 
 st.set_page_config(
-    page_title="Hệ thống Dự báo Doanh thu Đa mô hình",
+    page_title="Hệ thống dự báo doanh thu",
     page_icon="🚀",
     layout="wide"
 )
@@ -64,13 +64,13 @@ def load_rossmann_resources():
         return model, features
     except FileNotFoundError: return None, None
 
-st.title("🚀 Hệ thống Dự báo Doanh thu")
+st.title("🚀 Hệ thống dự báo doanh thu")
 
 selected_dataset = st.sidebar.selectbox("Chọn bộ dữ liệu muốn phân tích:", ["Olist E-commerce", "Rossmann Store Sales"])
 
 #Olist E-commerce
 if selected_dataset == "Olist E-commerce":
-    st.header("Phân tích Dự báo Doanh thu Olist")
+    st.header("Phân tích dự báo doanh thu Olist")
     #st.markdown("Tải lên file dữ liệu lịch sử Olist, chọn danh mục và khoảng thời gian để so sánh dự đoán với thực tế.")
     
     categories = ['bed_bath_table', 'health_beauty', 'sports_leisure', 'furniture_decor', 'computers_accessories']
@@ -99,7 +99,7 @@ if selected_dataset == "Olist E-commerce":
                         show_custom_toast("Tải file thành công!", icon="📄")
                 df = st.session_state['df_olist']
                 
-                st.subheader("Chọn Khoảng thời gian để Phân tích")
+                st.subheader("Chọn khoảng thời gian để phân tích")
                 period_type = st.selectbox("Chọn loại chu kỳ:", ["Ngày", "Tuần", "Tháng", "Năm"], key="olist_period")
                 min_date = df['order_purchase_timestamp'].min().date(); max_date = df['order_purchase_timestamp'].max().date()
 
@@ -112,7 +112,7 @@ if selected_dataset == "Olist E-commerce":
                     year = st.selectbox("Chọn năm:", options=sorted(df['order_purchase_timestamp'].dt.year.unique(), reverse=True), key="olist_year_full")
                     start_date = datetime(year, 1, 1).date(); end_date = datetime(year, 12, 31).date()
 
-                if st.button("Phân tích & So sánh Olist", type="primary", use_container_width=True, key="olist_button"):
+                if st.button("Phân tích & so sánh Olist", type="primary", use_container_width=True, key="olist_button"):
                     df_period = df[(df['order_purchase_timestamp'].dt.date >= start_date) & (df['order_purchase_timestamp'].dt.date <= end_date) & (df['category'] == selected_category)].copy()
                     if df_period.empty: show_custom_toast(f"Không tìm thấy dữ liệu cho '{selected_category}'", icon="⚠️")
                     else:
@@ -125,7 +125,7 @@ if selected_dataset == "Olist E-commerce":
                             end_time = time.perf_counter(); processing_time = end_time - start_time
                         
                         show_custom_toast("Phân tích hoàn tất!", icon="🎉")
-                        st.header("Kết quả Phân tích Olist")
+                        st.header("Kết quả phân tích Olist")
                         total_actual = y_actual.sum(); total_predicted = predictions.sum(); mape = mean_absolute_percentage_error(y_actual, predictions) * 100
                         col1, col2, col3, col4, col5 = st.columns(5)
                         col1.metric("Doanh thu Thực tế", f"{total_actual:,.2f} BRL"); col2.metric("Doanh thu Dự đoán", f"{total_predicted:,.2f} BRL", f"{(total_predicted-total_actual)/total_actual:.2%}"); col3.metric("Độ sai số (MAPE)", f"{mape:.2f}%"); col4.metric("Độ chính xác", f"{100 - mape:.2f}%"); col5.metric("Thời gian Xử lý", f"{processing_time:.4f} giây")
@@ -138,7 +138,7 @@ if selected_dataset == "Olist E-commerce":
 
 #Rossmann Store Sales
 elif selected_dataset == "Rossmann Store Sales":
-    st.header("Phân tích Dự báo Doanh số Rossmann")
+    st.header("Phân tích dự báo doanh số Rossmann")
     #st.markdown("Tải lên file dữ liệu lịch sử của Rossmann để so sánh dự đoán doanh số với thực tế.")
     
     with st.spinner("Đang tải mô hình Rossmann..."):
@@ -164,7 +164,7 @@ elif selected_dataset == "Rossmann Store Sales":
                         show_custom_toast("Tải file thành công!", icon="📄")
                 df = st.session_state['df_rossmann']
                 
-                st.subheader("Chọn Cửa hàng và Khoảng thời gian")
+                st.subheader("Chọn Cửa hàng và khoảng thời gian")
                 store_id = st.selectbox("Chọn ID Cửa hàng:", sorted(df['Store'].unique()), key="rossmann_store")
                 df_store = df[df['Store'] == store_id].copy()
                 min_date = df_store['Date'].min().date(); max_date = df_store['Date'].max().date()
